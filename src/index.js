@@ -73,20 +73,25 @@ if(props.statistics.hyva+props.statistics.neutraali+props.statistics.neutraali =
 
   return (
     <div>
+      <table>
+        <tbody>
         <Statistic text="hyva" value={props.statistics.hyva} />
         <Statistic text="neutraali" value={props.statistics.neutraali} />
         <Statistic text="huono" value={props.statistics.huono} />
         <Statistic text="keskiarvo" value={(props.statistics.hyva - props.statistics.huono) / (props.statistics.hyva + props.statistics.neutraali +props.statistics.huono)} />
         <Statistic text="positiivisia %" value ={100*props.statistics.hyva / (props.statistics.hyva + props.statistics.neutraali + props.statistics.huono)} />
+      </tbody>
+    </table>
     </div>
   )
 }
 
 const Statistic = (props) => {
   return (
-    <div>
-      <p>{props.text} {props.value}</p>
-    </div>
+      <tr>
+        <td>{props.text}</td>
+        <td>{props.value}</td>
+      </tr>
   )
 }
 
