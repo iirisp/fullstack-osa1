@@ -1,74 +1,94 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const App = () => {
-  const kurssi = {
-    nimi: 'Half Stack -sovelluskehitys',
-    osat:[
-    {
-      nimi: 'Reactin perusteet',
-      tehtavia: 10
-    },
-    {
-      nimi: 'Tiedonvälitys propseilla',
-      tehtavia: 7
-    },
-    {
-      nimi: 'Komponenttien tila',
-      tehtavia: 14
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      hyva: 0,
+      neutraali: 0,
+      huono: 0
     }
-  ]
+  }
+
+  asetaArvo = (counter, arvo) => {
+    if(counter==="hyva") {
+    return () => {
+      this.setState({ hyva: arvo })
+     }
+  }
+
+    if(counter==="neutraali") {
+      return () => {
+        this.setState({ neutraali: arvo })
+       }
+    }
+
+      if(counter==="huono") {
+        return () => {
+          this.setState({ huono: arvo })
+         }
+      }
+  }
+
+
+
+  render() {
+    return (
+      <div>
+        <h1>anna palautetta</h1>
+        <div>
+          <Button handleClick={this.asetaArvo("hyva", this.state.hyva+1)} teksti="hyva" />
+          <Button handleClick={this.asetaArvo("neutraali",this.state.neutraali+1)} teksti="neutraali" />
+          <Button handleClick={this.asetaArvo("huono", this.state.huono+1)} teksti="huono" />  
+        </div>
+         
+
+        <h1>statistiikka</h1>
+        <Statistics statistics={this.state} />
+      </div>
+    )
+
+  }
 }
 
 
 
-  return (
+
+const Button = ({handleClick, teksti}) => {
+  return(
+    <button onClick={handleClick}>{teksti}</button>
+  )
+}
+
+const Statistics = (props) => {
+
+if(props.statistics.hyva+props.statistics.neutraali+props.statistics.neutraali === 0) {
+  return(
     <div>
-      <Otsikko kurssi={kurssi} />
-      <Sisalto kurssi={kurssi} />
-      <Yhteensa kurssi={kurssi} />
+      <p>ei yhtään palautetta</p>
     </div>
   )
 }
 
+  return (
+    <div>
+        <Statistic text="hyva" value={props.statistics.hyva} />
+        <Statistic text="neutraali" value={props.statistics.neutraali} />
+        <Statistic text="huono" value={props.statistics.huono} />
+        <Statistic text="keskiarvo" value={(props.statistics.hyva - props.statistics.huono) / (props.statistics.hyva + props.statistics.neutraali +props.statistics.huono)} />
+        <Statistic text="positiivisia %" value ={100*props.statistics.hyva / (props.statistics.hyva + props.statistics.neutraali + props.statistics.huono)} />
+    </div>
+  )
+}
 
-const Otsikko = (props) => {
-    return (
-      <div>
-        <h1>{props.kurssi.nimi}</h1>
-      </div>
-    )
-  }
-
-  const Sisalto = (props) => {
-    return (
-      <div>
-      <Osa osa={props.kurssi.osat[0]} />
-      <Osa osa={props.kurssi.osat[1]} />
-      <Osa osa={props.kurssi.osat[2]} />
-      </div>
-    )
-  }
-
-  const Osa = (props) => {
-    return (
-      <div>
-      <p>{props.osa['nimi']} {props.osa['tehtavia']}</p>
-      </div>
-    )
-  }
-
-
-
-
-  const Yhteensa = (props) => {
-
-    return (
-      <div>
-        <p>yhteensä {props.kurssi.osat[0].tehtavia + props.kurssi.osat[1].tehtavia + props.kurssi.osat[2].tehtavia} tehtävää</p>
-      </div>
-    )
-  }
+const Statistic = (props) => {
+  return (
+    <div>
+      <p>{props.text} {props.value}</p>
+    </div>
+  )
+}
 
 
 
